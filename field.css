@@ -1,0 +1,75 @@
+body {
+	margin: 0;
+}
+
+#field, #robot, #robot::after, canvas {
+	user-select: none;
+}
+
+#field {
+	background: #22FF22 url(carpet.jpg);
+	background: #2d2;
+}
+
+.field {
+	position: fixed;
+	top: 0;
+	left: 0;
+	background: rgba(0,0,0,0);
+}
+canvas#trace {
+	background: url(field.png);
+}
+
+#robot {
+	width: 0px;
+	height: 0px;
+	background: #2222FF;
+	padding: 16.5px 14px; /* 33x28 */
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	transform-origin: 50% 50%;
+	transform: translate(100px, 100px);
+}
+
+#robot::after {
+    content: "frant";
+    font-family: sans-serif;
+    color: red;
+    transform: rotate(-90deg);
+    position: absolute;
+    transform-origin: 50% 0%;
+    padding-top: 0.15em;
+    margin-left: -0.15em;
+    background-color: aqua;
+	width: 33px;						/************** robot dim here /**/
+    text-align: center;
+}
+
+#data {
+	margin: 1em;
+}
+
+#circles {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 12em;
+}
+
+.point-data-container {
+	display: flex;
+}
+
+span.circle {
+    width: 1em;
+    height: 1em;
+    background-color: #0f0;
+    border-radius: 0.5em;
+    margin: 0.25em;
+}
+
+span.point-data {
+    margin: 0.175em;
+}

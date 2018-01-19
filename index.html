@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Field Simulator</title>
+	<link href="field.css" type="text/css" rel="stylesheet">
+	<script src="/networktables/networktables.js"></script>
+	<script src="/jquery-3.2.1.js"></script>
+	<script src="rainbow.js"></script>
+	<script src="init.js"></script>
+	<script src="robot.js"></script>
+	<script src="points.js"></script>
+	<script src="mouse.js"></script>
+	<script src="keys.js"></script>
+</head>
+<body>
+	<div id="field" class="field">
+	</div>
+	<canvas id="trace" class="field overlay" width="648" height="324">
+	</canvas>
+	<canvas id="points" class="field overlay" width="648" height="324">
+	</canvas>
+	<div id="robot">
+	</div>
+	<div id="data">
+		Current: (<span id="posX"></span>, <span id="posY"></span>, <span id="posT"></span>)
+	</div>
+	<div id="circles"></div>
+</body>
+</html>

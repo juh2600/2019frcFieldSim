@@ -1,0 +1,1 @@
+python -m pynetworktables2js %*
