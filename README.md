@@ -1,7 +1,8 @@
 # 2018frcFieldSim
-## Field visualization and real-time robot position tracking for FRC Power Up
+Field visualization and real-time robot position tracking for FRC Power Up
 
-You'll need (pynetworktables2js)[https://github.com/robotpy/pynetworktables2js] to use this.
+## Installation
+You'll need [pynetworktables2js](https://github.com/robotpy/pynetworktables2js) to use this.
 
 0. Install Python.
 1. Install the above package for Python.
