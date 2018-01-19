@@ -19,7 +19,8 @@ Good luck!
 
 ## Features
 * Square moves where robot moves
-* Click and drag robot or use WASD/left/right to move it
+* Click and drag square or use WASD/left/right to move it
+* Click the field to list the coordinates of some point on it
 
 ## Stuff to configure!
 * Most of it is in `init.js`
