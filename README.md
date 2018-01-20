@@ -6,7 +6,7 @@ You'll need [pynetworktables2js](https://github.com/robotpy/pynetworktables2js) 
 
 0. Install Python.
 1. Install the above package for Python.
-2. Navigate to the directory containing this project.
+2. In a terminal (e.g., Command Prompt), navigate to the directory containing this project.
 3. Start the server using `serve.cmd`:
 
   > To just serve files without a robot, run `serve`. 
