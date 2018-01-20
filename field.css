@@ -9,6 +9,7 @@ body {
 #field {
 	background: #22FF22 url(carpet.jpg);
 	background: #2d2;
+	background: white;
 }
 
 .field {
@@ -30,25 +31,40 @@ canvas#trace {
 	top: 0px;
 	left: 0px;
 	transform-origin: 50% 50%;
-	transform: translate(100px, 100px);
 }
 
 #robot::after {
     content: "frant";
     font-family: sans-serif;
-    color: red;
+    color: rgba(255,00,0.75);
     transform: rotate(-90deg);
     position: absolute;
     transform-origin: 50% 0%;
     padding-top: 0.15em;
     margin-left: -0.15em;
-    background-color: aqua;
+    background-color: rgba(0,127,127,0.5);
 	width: 33px;						/************** robot dim here /**/
     text-align: center;
+	font-size: 60%;
+}
+
+.shadowbot {
+    box-sizing: border-box;
+    transform-origin: 50% 50% 0px;
+    position: fixed;
+	top: 0px;
+	left: 0px;
 }
 
 #data {
 	margin: 1em;
+}
+#data > span {
+    box-sizing: border-box;
+    width: 4em;
+    padding-left: 0.25em;
+    display: inline-block;
+    background: lightgrey;
 }
 
 #circles {

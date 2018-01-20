@@ -13,36 +13,44 @@ onkeydown = function(e) {
 			setXYT();
 			break;
 		case 'w':
-			X += i;
-			setXYT();
-			break;
-			X += Math.cos(T*Math.PI/180)*5;
-			Y += Math.sin(T*Math.PI/180)*5;
-			setXYT();
+			if(fieldCentric) {
+				X += i;
+				setXYT();
+			} else {
+				X += Math.cos(T*Math.PI/180)*5;
+				Y += Math.sin(T*Math.PI/180)*5;
+				setXYT();
+			}
 			break;
 		case 'a':
-			Y -= i;
-			setXYT();
-			break;
-			X -= Math.sin(-T*Math.PI/180)*5;
-			Y -= Math.cos(-T*Math.PI/180)*5;
-			setXYT();
+			if(fieldCentric) {
+				Y -= i;
+				setXYT();
+			} else {
+				X -= Math.sin(-T*Math.PI/180)*5;
+				Y -= Math.cos(-T*Math.PI/180)*5;
+				setXYT();
+			}
 			break;
 		case 's':
-			X -= i;
-			setXYT();
-			break;
-			X -= Math.cos(T*Math.PI/180)*5;
-			Y -= Math.sin(T*Math.PI/180)*5;
-			setXYT();
+			if(fieldCentric) {
+				X -= i;
+				setXYT();
+			} else {
+				X -= Math.cos(T*Math.PI/180)*5;
+				Y -= Math.sin(T*Math.PI/180)*5;
+				setXYT();
+			}
 			break;
 		case 'd':
-			Y += i;
-			setXYT();
-			break;
-			X += Math.sin(-T*Math.PI/180)*5;
-			Y += Math.cos(-T*Math.PI/180)*5;
-			setXYT();
+			if(fieldCentric) {
+				Y += i;
+				setXYT();
+			} else {
+				X += Math.sin(-T*Math.PI/180)*5;
+				Y += Math.cos(-T*Math.PI/180)*5;
+				setXYT();
+			}
 			break;
 		default: break;
 	}

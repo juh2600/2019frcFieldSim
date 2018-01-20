@@ -1,13 +1,26 @@
 onmousedown = function(e){
 	switch(e.target) {
 		case document.getElementById('robot'):
-			onmousemove = function(e){setXYT(null, e.x, e.y, null);}
+			onmousemove = function(e){
+				X = e.x;
+				Y = e.y;
+				setXYT();
+			}
 			break;
 		case document.getElementById('points'):
-			makePoint(e);
+			switch(e.which) {
+				case 1:
+					makePoint(e);
+					break;
+				case 3:
+					clearTrace();
+					break;
+				default:
+					break;
+			}
 			break;
 		default:
-			console.log(e);
+	//		console.log(e);
 			break;
 	}
 }
