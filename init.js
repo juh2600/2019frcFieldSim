@@ -1,7 +1,7 @@
 // Robot dimensions in inches
 // Note that width is from the driver's perspective on the left side of the field
-robotWidth = toFeet(23.5); //33;
-robotLength = toFeet(30.0); //28;
+robotWidth = toFeet(30.0); //33;
+robotLength = toFeet(23.5); //28;
 
 // Field dimensions in inches
 /* Field is 27'x54' */
@@ -13,6 +13,7 @@ fieldLength = toFeet(648);
 posXkey = '/SmartDashboard/Robot X';
 posYkey = '/SmartDashboard/Robot Y';
 posTkey = '/SmartDashboard/Robot Heading';
+pathFinKey = '/SmartDashboard/Auto';
 
 // Sorted list of keys on SmartDashboard
 sd = NetworkTables.getKeys().filter(function(key){return (key.indexOf('SmartDashboard') !==-1)?true:false;}).sort();
@@ -26,13 +27,16 @@ X = Xinit;
 Y = Yinit;
 T = Tinit;
 
-// How many unique colors the points will be
+// How many unique colors the shadowbots and paths will be
 var numColors = 8;
+// How thicc the paths should be
+var thiccness = 3;
 
-var traceCanvas = null;
-var trace = null;
-var pointsCanvas = null;
-var points = null;
+var traceAutoCanvas = null;
+var traceAuto = null;
+var traceTeleCanvas = null;
+var traceTele = null;
+var fieldImg = null;
 
 // True is field centric
 // False is robot centric
@@ -45,19 +49,30 @@ $(function(){
 	$('.field').css('height',toInches(fieldWidth)+'px');
 	$('body').css('margin-top',toInches(fieldWidth)+'px');
 	/* 
-	$('#trace').css('width',fieldLength+'px');
-	$('#trace').css('height',fieldWidth+'px');
-	$('#points').css('width',fieldLength+'px');
-	$('#points').css('height',fieldWidth+'px'); */
+	$('#traceAuto').css('width',fieldLength+'px');
+	$('#traceAuto').css('height',fieldWidth+'px');
+	$('#traceTele').css('width',fieldLength+'px');
+	$('#traceTele').css('height',fieldWidth+'px'); */
 	
-	traceCanvas = document.getElementById('trace');
-	trace = traceCanvas.getContext('2d');
+	fieldImg = document.getElementById('fieldImg');
+	traceAutoCanvas = document.getElementById('traceAuto');
+	traceAuto = traceAutoCanvas.getContext('2d');
 	setXYT();
-	trace.beginPath();
-	trace.moveTo(toInches(X),toInches(Y));
-	trace.strokeStyle = '#2222FF';
-	trace.lineWidth = 5;
+	traceAuto.beginPath();
+	traceAuto.moveTo(toInches(X),toInches(Y));
+	traceAuto.strokeStyle = '#2222FF';
+	traceAuto.lineWidth = thiccness;
 	
-	pointsCanvas = document.getElementById('points');
-	points = pointsCanvas.getContext('2d');
+	traceTeleCanvas = document.getElementById('traceTele');
+	traceTele = traceTeleCanvas.getContext('2d');
+	traceTele.strokeStyle = '#2222FF';
+	traceTele.lineWidth = thiccness;
+	// Disable context menu
+	document.getElementById('traceTele').addEventListener('contextmenu',event=>event.preventDefault());
+	
+	clearTrace();
+	NetworkTables.addKeyListener(pathFinKey,updateSaveButtons,true);
+	
+	$('#saveAuto').on('click',saveAutoPaths);
+	$('#saveTele').on('click',saveTelePaths);
 });

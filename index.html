@@ -6,6 +6,7 @@
 	<script src="/networktables/networktables.js"></script>
 	<script src="/jquery-3.2.1.js"></script>
 	<script src="rainbow.js"></script>
+	<script src="canvas2image.js"></script>
 	<script src="util.js"></script>
 	<script src="init.js"></script>
 	<script src="robot.js"></script>
@@ -15,10 +16,11 @@
 </head>
 <body>
 	<div id="field" class="field">
+	<img id="fieldImg" class="field nope" src="field.png">
 	</div>
-	<canvas id="trace" class="field overlay" width="648" height="324">
+	<canvas id="traceAuto" class="field overlay" width="648" height="324">
 	</canvas>
-	<canvas id="points" class="field overlay" width="648" height="324">
+	<canvas id="traceTele" class="field overlay" width="648" height="324">
 	</canvas>
 	<div id="robot">
 	</div>
@@ -26,6 +28,8 @@
 	</div>
 	<div id="data">
 		Current: (<span id="posX"></span>, <span id="posY"></span>, <span id="posT"></span>)
+		<input type="button" id="saveAuto" value="Save Auto">
+		<input type="button" id="saveTele" value="Save Tele">
 	</div>
 	<div id="circles"></div>
 </body>

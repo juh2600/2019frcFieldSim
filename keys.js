@@ -1,5 +1,5 @@
 onkeydown = function(e) {
-	var i = 5;
+	var dist = toFeet(6);
 	switch(e.key) {
 		case 'ArrowLeft':
 			T -= 5;
@@ -14,41 +14,41 @@ onkeydown = function(e) {
 			break;
 		case 'w':
 			if(fieldCentric) {
-				X += i;
+				X += dist;
 				setXYT();
 			} else {
-				X += Math.cos(T*Math.PI/180)*5;
-				Y += Math.sin(T*Math.PI/180)*5;
+				X += Math.cos(T*Math.PI/180)*dist;
+				Y += Math.sin(T*Math.PI/180)*dist;
 				setXYT();
 			}
 			break;
 		case 'a':
 			if(fieldCentric) {
-				Y -= i;
+				Y -= dist;
 				setXYT();
 			} else {
-				X -= Math.sin(-T*Math.PI/180)*5;
-				Y -= Math.cos(-T*Math.PI/180)*5;
+				X -= Math.sin(-T*Math.PI/180)*dist;
+				Y -= Math.cos(-T*Math.PI/180)*dist;
 				setXYT();
 			}
 			break;
 		case 's':
 			if(fieldCentric) {
-				X -= i;
+				X -= dist;
 				setXYT();
 			} else {
-				X -= Math.cos(T*Math.PI/180)*5;
-				Y -= Math.sin(T*Math.PI/180)*5;
+				X -= Math.cos(T*Math.PI/180)*dist;
+				Y -= Math.sin(T*Math.PI/180)*dist;
 				setXYT();
 			}
 			break;
 		case 'd':
 			if(fieldCentric) {
-				Y += i;
+				Y += dist;
 				setXYT();
 			} else {
-				X += Math.sin(-T*Math.PI/180)*5;
-				Y += Math.cos(-T*Math.PI/180)*5;
+				X += Math.sin(-T*Math.PI/180)*dist;
+				Y += Math.cos(-T*Math.PI/180)*dist;
 				setXYT();
 			}
 			break;

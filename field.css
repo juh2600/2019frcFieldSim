@@ -1,3 +1,7 @@
+.nope {
+	display: none !important;
+}
+
 body {
 	margin: 0;
 }
@@ -17,9 +21,6 @@ body {
 	top: 0;
 	left: 0;
 	background: rgba(0,0,0,0);
-}
-canvas#trace {
-	background: url(field.png);
 }
 
 #robot {
@@ -67,6 +68,11 @@ canvas#trace {
     background: lightgrey;
 }
 
+#data > input[type=button] {
+	margin-left: 0.5em;
+	
+}
+
 #circles {
     display: flex;
     flex-wrap: wrap;
@@ -78,6 +84,9 @@ canvas#trace {
 	display: flex;
 }
 
+input.point-data {
+	width: 5em;
+}
 span.circle {
     width: 1em;
     height: 1em;

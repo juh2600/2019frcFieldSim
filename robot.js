@@ -10,7 +10,7 @@ function getY() {
 }
 function getT() {
 	if(NetworkTables.isRobotConnected())
-		T = NetworkTables.getValue(posTkey);
+		T = (NetworkTables.getValue(posTkey) + 90) % 360;
 	return T;
 }
 function transX(x) {
@@ -30,7 +30,7 @@ function refresh(thing = null) {
 }
 
 pathColorIndex = 0;
-zeroTol = 0.5;
+zeroTol = 0.2;
 function setXYT(thing = null) {
 /*/		let x = getX();
 		let y = getY();
@@ -40,26 +40,27 @@ function setXYT(thing = null) {
 	Y = y;
 	T = t;
 /*/
+// consider moving this to end of function, then using X-x et al. to determine whether we've jumped
 	x = X;
 	y = Y;
 	t = T;
 /**/
 	transform = transX(toInches(x)) + transY(toInches(y)) + rotate(t);
 	$('#robot').css('transform',transform);
-	if(trace !== null) {
+	if(trace() !== null) {
 		if((Math.abs(x-Xinit)<zeroTol && Math.abs(y-Yinit)<zeroTol && Math.abs(t-Tinit)<zeroTol) ||
 			(x === 0 && y === 0 && t === 0)) {
 			let s = trace.strokeStyle;
 //			trace.strokeStyle = 'red';
 //			trace.stroke();
-			trace.closePath();
+			trace().closePath();
 			let color = rainbow(numColors,pathColorIndex++);
 			console.log('Robot zeroed\nClosed path '+s+'\nBeginning path '+color+'\n');
-			trace.strokeStyle = color;
-			trace.beginPath();
+			trace().strokeStyle = color;
+			trace().beginPath();
 		}
-		trace.lineTo(toInches(x),toInches(y));
-		trace.stroke();
+		trace().lineTo(toInches(x),toInches(y));
+		trace().stroke();
 	}
 	$('#posX').text(round(x));
 	$('#posY').text(round(y));
@@ -78,7 +79,12 @@ NetworkTables.addKeyListener(posTkey,refresh,true);
 /**/
 
 function clearTrace() {
-	trace.closePath();
-	trace.clearRect(0,0,toInches(fieldLength),toInches(fieldWidth));
-	trace.beginPath();
+	traceAuto.closePath();
+	traceAuto.clearRect(0,0,toInches(fieldLength),toInches(fieldWidth));
+	drawField(traceAuto);
+	traceAuto.beginPath();
+	traceTele.closePath();
+	traceTele.clearRect(0,0,toInches(fieldLength),toInches(fieldWidth));
+	drawField(traceTele);
+	traceTele.beginPath();
 }

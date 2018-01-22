@@ -16,13 +16,13 @@ function makePoint(e) {
 		'<span class="circle" style="background-color: '+color+'"></span>'
 	);
 	$('div.point-data-container[data-index='+pointNum+']').append(
-		'<input type="number" class="point-data xval" data-index="'+pointNum+'" value="'+round(toFeet(x))+'">'
+		'<input type="number" class="point-data xval" data-index="'+pointNum+'" value="'+round(toFeet(x))+'" min="0" step="0.001">'
 	);
 	$('div.point-data-container[data-index='+pointNum+']').append(
-		'<input type="number" class="point-data yval" data-index="'+pointNum+'" value="'+round(toFeet(y))+'">'
+		'<input type="number" class="point-data yval" data-index="'+pointNum+'" value="'+round(toFeet(y))+'" min="0" step="0.001">'
 	);
 	$('div.point-data-container[data-index='+pointNum+']').append(
-		'<input type="number" class="point-data tval" data-index="'+pointNum+'" value="90">'
+		'<input type="number" class="point-data tval" data-index="'+pointNum+'" value="90" min="0" step="1">'
 	);
 	$('#shadowbot-container').append('<div class="shadowbot" data-index="'+pointNum+'" data-x="'+(x-toInches(robotLength/2))+'" data-y="'+(y-toInches(robotWidth/2))+'"></div>');
 	$('.shadowbot[data-index='+pointNum+']').css(

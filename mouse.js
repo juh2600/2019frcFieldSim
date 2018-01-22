@@ -2,12 +2,12 @@ onmousedown = function(e){
 	switch(e.target) {
 		case document.getElementById('robot'):
 			onmousemove = function(e){
-				X = e.x;
-				Y = e.y;
+				X = toFeet(e.x);
+				Y = toFeet(e.y);
 				setXYT();
 			}
 			break;
-		case document.getElementById('points'):
+		case document.getElementById('traceTele'):
 			switch(e.which) {
 				case 1:
 					makePoint(e);
@@ -18,6 +18,8 @@ onmousedown = function(e){
 				default:
 					break;
 			}
+			break;
+		case document.getElementById('data'):
 			break;
 		default:
 	//		console.log(e);
