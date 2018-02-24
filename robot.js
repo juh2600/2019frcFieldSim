@@ -1,90 +1,69 @@
-function getX() {
-	if(NetworkTables.isRobotConnected())
-		X = NetworkTables.getValue(posXkey);
-	return X;
-}
-function getY() {
-	if(NetworkTables.isRobotConnected())
-		Y = NetworkTables.getValue(posYkey);
-	return Y;
-}
-function getT() {
-	if(NetworkTables.isRobotConnected())
-		T = (NetworkTables.getValue(posTkey) + 90) % 360;
-	return T;
-}
-function transX(x) {
-	return 'translateX('+(x-toInches(robotLength/2))+'px) ';
-}
-function transY(y) {
-	return 'translateY('+(y-toInches(robotWidth/2))+'px) ';
-}
-function rotate(t) {
-	return 'rotate('+t+'deg) ';
-}
-function refresh(thing = null) {
-	X = getX();
-	Y = getY();
-	T = getT();
-	setXYT();
-}
+var robot;
+var robotTraceAuto;
+var colors = 2.3;
+var colorIndex = 0;
 
-pathColorIndex = 0;
-zeroTol = 0.2;
-function setXYT(thing = null) {
-/*/		let x = getX();
-		let y = getY();
-		let t = getT();
-	console.log([x,y,t]);
-	X = x;
-	Y = y;
-	T = t;
-/*/
-// consider moving this to end of function, then using X-x et al. to determine whether we've jumped
-	x = X;
-	y = Y;
-	t = T;
-/**/
-	transform = transX(toInches(x)) + transY(toInches(y)) + rotate(t);
-	$('#robot').css('transform',transform);
-	if(trace() !== null) {
-		if((Math.abs(x-Xinit)<zeroTol && Math.abs(y-Yinit)<zeroTol && Math.abs(t-Tinit)<zeroTol) ||
-			(x === 0 && y === 0 && t === 0)) {
-			let s = trace.strokeStyle;
-//			trace.strokeStyle = 'red';
-//			trace.stroke();
-			trace().closePath();
-			let color = rainbow(numColors,pathColorIndex++);
-			console.log('Robot zeroed\nClosed path '+s+'\nBeginning path '+color+'\n');
-			trace().strokeStyle = color;
-			trace().beginPath();
-		}
-		trace().lineTo(toInches(x),toInches(y));
-		trace().stroke();
-	}
-	$('#posX').text(round(x));
-	$('#posY').text(round(y));
-	$('#posT').text(round(t));
-}
+$(function(){
+	mod3 = new Trackable(
+		'mod3',
+		1.5,
+		4,
+		sd('Module 3 X'),
+		sd('Module 3 Y'),
+		sd('Module 3 Angle'),
+		'grey',
+		true
+		);
+	mod3Trace = new Traceable(
+		mod3,
+		'mod3trace',
+		function(){return true;},
+		'grey',
+		1
+		);
+	robot = new Trackable(
+		'robot',
+		39,
+		34,
+		sd('Robot X'),
+		sd('Robot Y'),
+		sd('Robot Heading'),
+		'#2222FF',
+		true
+		);
+	path = new Trackable(
+		'pathHead',
+		0,
+		0,
+		sd('Path X'),
+		sd('Path Y'),
+		null,
+		'black',
+		true
+		);
 
-// Listen for changes to relevant keys
-/*/
-NetworkTables.addKeyListener(posXkey,setXYT,true);
-NetworkTables.addKeyListener(posYkey,setXYT,true);
-NetworkTables.addKeyListener(posTkey,setXYT,true);
-/*/
-NetworkTables.addKeyListener(posXkey,refresh,true);
-NetworkTables.addKeyListener(posYkey,refresh,true);
-NetworkTables.addKeyListener(posTkey,refresh,true);
-/**/
-
-function clearTrace() {
-	traceAuto.closePath();
-	traceAuto.clearRect(0,0,toInches(fieldLength),toInches(fieldWidth));
-	drawField(traceAuto);
-	traceAuto.beginPath();
-	traceTele.closePath();
-	traceTele.clearRect(0,0,toInches(fieldLength),toInches(fieldWidth));
-	drawField(traceTele);
-	traceTele.beginPath();
-}
+	robotTracePath = new Traceable(
+		path,
+		'tracePath',
+		function(){return true;},
+		function(){return rainbow(colors,colorIndex++);},
+		1
+		);
+	robotTraceAuto = new Traceable(
+		robot,
+		'traceAuto',
+		function(){return NetworkTables.getValue(sd('Auto'));},
+		function(){return rainbow(colors,colorIndex++);},
+		1
+		);
+	robotTraceTele = new Traceable(
+		robot,
+		'traceTele',
+		function(){return !NetworkTables.getValue(sd('Auto'));},
+		function(){return rainbow(colors,colorIndex++);},
+		1
+		);
+		
+	$(robot.elem).append('<div id="frant">frant</div>');
+	
+});

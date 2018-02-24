@@ -5,32 +5,31 @@
 	<link href="field.css" type="text/css" rel="stylesheet">
 	<script src="/networktables/networktables.js"></script>
 	<script src="/jquery-3.2.1.js"></script>
-	<script src="rainbow.js"></script>
-	<script src="canvas2image.js"></script>
+	<script src="/rainbow.js"></script>
 	<script src="util.js"></script>
-	<script src="init.js"></script>
-	<script src="robot.js"></script>
-	<script src="points.js"></script>
-	<script src="mouse.js"></script>
-	<script src="keys.js"></script>
 </head>
 <body>
 	<div id="field" class="field">
-	<img id="fieldImg" class="field nope" src="field.png">
+	<img id="fieldImg" class="field" src="field.png">
+	<div id="negYWall" class="wall"></div>
+	<div id="posYWall" class="wall"></div>
 	</div>
-	<canvas id="traceAuto" class="field overlay" width="648" height="324">
-	</canvas>
-	<canvas id="traceTele" class="field overlay" width="648" height="324">
-	</canvas>
-	<div id="robot">
-	</div>
+	<div id="trackables"></div>
+	<div id="traceables"></div>
 	<div id="shadowbot-container">
 	</div>
-	<div id="data">
+	<!--div id="data">
 		Current: (<span id="posX"></span>, <span id="posY"></span>, <span id="posT"></span>)
 		<input type="button" id="saveAuto" value="Save Auto">
 		<input type="button" id="saveTele" value="Save Tele">
 	</div>
-	<div id="circles"></div>
+	<div id="circles"></div-->
+	<script src="Trackable.js"></script>
+	<script src="Traceable.js"></script>
+	<script src="robot.js"></script>
+	<input id="resetPath" class="reset" type="button" onclick="robotTracePath.reset()" value="Clear Path">
+	<input id="resetAuto" class="reset" type="button" onclick="robotTraceAuto.reset()" value="Clear Auto">
+	<input id="resetTele" class="reset" type="button" onclick="robotTraceTele.reset()" value="Clear Tele">
+	<input id="resetTele" class="reset" type="button" onclick="mod3Trace.reset()" value="Clear Mod3">
 </body>
 </html>

@@ -3,7 +3,7 @@
 }
 
 body {
-	margin: 0;
+	margin: 324px 0 0 0;
 }
 
 #field, #robot, #robot::after, canvas {
@@ -21,32 +21,42 @@ body {
 	top: 0;
 	left: 0;
 	background: rgba(0,0,0,0);
+	width: 648px;
+	height: 324px;
 }
-
 #robot {
-	width: 0px;
-	height: 0px;
-	background: #2222FF;
-	padding: 16.5px 14px; /* 33x28 */
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	transform-origin: 50% 50%;
+	border-width: 3.25px !important;
+	border-radius: 1.5px;
 }
-
+/*/
 #robot::after {
     content: "frant";
     font-family: sans-serif;
-    color: rgba(255,00,0.75);
-    transform: rotate(-90deg);
+    transform: rotate(-180deg);
     position: absolute;
     transform-origin: 50% 0%;
-    padding-top: 0.15em;
-    margin-left: -0.15em;
+    padding-top: 3.25px; /* bumper is 3.25" thicc *//*
     background-color: rgba(0,127,127,0.5);
-	width: 33px;						/************** robot dim here /**/
+	width: 100%;
+	height: 11px; /* intake extends 11" past bumper *//*
     text-align: center;
 	font-size: 60%;
+}
+/**/
+#frant {
+    background-color: rgba(0,127,127,0.5);
+    width: 100%;
+    height: 11px;
+    top: calc(-11px + -3.25px);
+    transform: rotate(-180deg);
+    position: absolute;
+    font-family: sans-serif;
+    text-align: center;
+	font-size: 60%;
+}
+
+#pathHead {
+	display: none;
 }
 
 .shadowbot {
@@ -97,4 +107,18 @@ span.circle {
 
 span.point-data {
     margin: 0.175em;
+}
+
+.wall {
+	position: absolute;
+	width: 100%;
+	height: 0px;
+	box-sizing: border-box;
+	border: 0.5px dashed black;
+}
+#negYWall {
+	top: 16.25px;
+}
+#posYWall {
+	top: 303.13px;
 }
