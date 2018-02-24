@@ -122,3 +122,8 @@ span.point-data {
 #posYWall {
 	top: 303.13px;
 }
+img.field {
+    background: url(grid4ft.png) !important;
+    background-repeat: repeat;
+    background-size: 24px !important;
+}
