@@ -19,11 +19,8 @@ Good luck!
 
 ## Features
 * Square moves where robot moves
-* Click and drag square or use WASD/left/right to move it
-* Click the field to list the coordinates of some point on it
 
 ## Stuff to configure!
-* Most of it is in `init.js`
+* Specify trackables and traceables in `robot.js`
 * `index.html` is the page that loads in your browser
 * `field.css` is the associated CSS
-* Field maps of varying opacities are included, as is a sample of the official carpet, 'Ground Pepper'
