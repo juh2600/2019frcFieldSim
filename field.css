@@ -123,7 +123,7 @@ span.point-data {
 	top: 303.13px;
 }
 img.field {
-    background: url(grid4ft.png) !important;
+    background: url(grid4ft.png);
     background-repeat: repeat;
-    background-size: 24px !important;
+    background-size: 24px;
 }

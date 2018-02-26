@@ -7,12 +7,14 @@ function Trackable(
 	posTkey=null,
 	color='rgb(0,0,255)',
 	smoothing=false,
-	convertUnitsToField=function(x){return 12.0*x;}
+	scalar=1,
+	convertUnitsToField=function(x){return 12.0*scalar*x;}
 ) {
 	var t = {};
 	t.id = id;
-	t.width = width;
-	t.height = height;
+	t.scalar = scalar;
+	t.width = width*scalar;
+	t.height = height*scalar;
 	t.color = color;
 	$('#trackables').append('<div id="'+id+'" class="trackable"></div>');
 	t.elem = $('#'+id)[0];

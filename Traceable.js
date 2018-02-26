@@ -3,7 +3,8 @@ function Traceable(
 	canvas,
 	condition=function(){return true;}, // gonna use an event instead // maybe
 	color=function(){return 'red';},
-	thiccness=function(){return 3;}
+	thiccness=function(){return 3;},
+	newPathTrigger=function(){return false;}
 ) {
 	var t = {};
 	t.trackable = trackable;

@@ -2,8 +2,15 @@ var robot;
 var robotTraceAuto;
 var colors = 2.3;
 var colorIndex = 0;
+var scalingFactor = 1.75;
 
 $(function(){
+	$('.field').width($('.field').width()*scalingFactor);
+	$('.field').height($('.field').height()*scalingFactor);
+	$('.wall').each(function(e){$(this).css('top',parseFloat($(this).css('top'))*scalingFactor+"px");});
+	$('#fieldImg').css('background-size',parseInt($('#fieldImg').css('background-size'))*scalingFactor+"px");
+	$('body').css('margin-top',parseInt($('body').css('margin-top'))*scalingFactor+"px");
+	
 	mod3 = new Trackable(
 		'mod3',
 		1.5,
@@ -12,15 +19,37 @@ $(function(){
 		sd('Module 3 Y'),
 		sd('Module 3 Angle'),
 		'grey',
-		true
+		true,
+		scalingFactor
 		);
-	mod3Trace = new Traceable(
+	mod3Tracer = new Traceable(
 		mod3,
 		'mod3trace',
 		function(){return true;},
 		'grey',
 		1
 		);
+	
+	pathPoint = new Trackable(
+		'pathHead',
+		0,
+		0,
+		sd('Path X'),
+		sd('Path Y'),
+		null,
+		'transparent',
+		true,
+		scalingFactor
+		);
+
+	pathTracer = new Traceable(
+		pathPoint,
+		'tracePath',
+		function(){return true;},
+		function(){return rainbow(colors,colorIndex++);},
+		1
+		);
+	
 	robot = new Trackable(
 		'robot',
 		39,
@@ -29,34 +58,17 @@ $(function(){
 		sd('Robot Y'),
 		sd('Robot Heading'),
 		'#2222FF',
-		true
+		true,
+		scalingFactor
 		);
-	path = new Trackable(
-		'pathHead',
-		0,
-		0,
-		sd('Path X'),
-		sd('Path Y'),
-		null,
-		'black',
-		true
-		);
-
-	robotTracePath = new Traceable(
-		path,
-		'tracePath',
-		function(){return true;},
-		function(){return rainbow(colors,colorIndex++);},
-		1
-		);
-	robotTraceAuto = new Traceable(
+	robotTracerAuto = new Traceable(
 		robot,
-		'traceAuto',
+		'robotTraceAuto',
 		function(){return NetworkTables.getValue(sd('Auto'));},
 		function(){return rainbow(colors,colorIndex++);},
 		1
 		);
-	robotTraceTele = new Traceable(
+	robotTracerTele = new Traceable(
 		robot,
 		'traceTele',
 		function(){return !NetworkTables.getValue(sd('Auto'));},
