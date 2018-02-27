@@ -1,3 +1,6 @@
+var tracks = []; // things created by Trackable()
+var trackables = {}; // for functions that act on tracks
+
 function Trackable(
 	id,
 	width,
@@ -23,13 +26,7 @@ function Trackable(
 		"height":t.height,
 		"top":(-t.height)/2,
 		"left":(-t.width)/2,
-		"transform-origin":"50% 50%",
-		"padding":0,
-		"margin":0,
-		"box-sizing":"border-box",
-		"position":"fixed",
-		"border-color":t.color,
-		"border":"1px solid",
+		"border-color":t.color
 		});
 	
 	t.eventUpdate = new Event(id);
@@ -42,18 +39,18 @@ function Trackable(
 	t.X = function(){return NetworkTables.getValue(t.keyX());};
 	t.Y = function(){return NetworkTables.getValue(t.keyY());};
 	t.T = function(){return NetworkTables.getValue(t.keyT());};
-	t.translateX = function() {return 'translateX('+convertUnitsToField(t.X())+'px)';};
-	t.translateY = function() {return ' translateY('+convertUnitsToField(t.Y())+'px)';};
-	t.rotateT = function() {return ' rotate('+(t.T()+90)+'deg)';};
+	t.translateX = function() {return 'translateX('+t.getFieldX()+'px)';};
+	t.translateY = function() {return ' translateY('+t.getFieldY()+'px)';};
+	t.rotateT = function() {return ' rotate('+t.getFieldT()+'deg)';};
 	
-	t.getX = function() {return convertUnitsToField(t.X());};
-	t.getY = function() {return convertUnitsToField(t.Y());};
-	t.getT = function() {return t.T();};
+	t.getFieldX = function() {return convertUnitsToField(t.X());};
+	t.getFieldY = function() {return convertUnitsToField(t.Y());};
+	t.getFieldT = function() {return t.T()+90;};
 	
 	if(posTkey === null) {t.T = function(){return null;}; t.rotateT = function(){return '';};}
 
 	t.update = function() {
-		console.log(t.getX(),t.getY(),t.getT());
+		console.log(t.X(),t.Y(),t.T());
 		$(t.elem).css('transform',t.translateX()+t.translateY()+t.rotateT());
 		t.elem.dispatchEvent(t.eventUpdate);
 	}
@@ -68,5 +65,6 @@ function Trackable(
 //	this.state = null; // set to "auto" or "tele" for tracing?
 	// actually this isn't where we should check this
 	console.log(t);
+	tracks.push(t);
 	return t;
 }

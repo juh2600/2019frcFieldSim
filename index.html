@@ -3,6 +3,7 @@
 <head>
 	<title>Field Simulator</title>
 	<link href="field.css" type="text/css" rel="stylesheet">
+	<link href="trackable.css" type="text/css" rel="stylesheet">
 	<script src="/networktables/networktables.js"></script>
 	<script src="jquery-3.2.1.js"></script>
 	<script src="rainbow.js"></script>
@@ -27,9 +28,10 @@
 	<script src="Trackable.js"></script>
 	<script src="Traceable.js"></script>
 	<script src="robot.js"></script>
-	<input id="resetPath" class="reset" type="button" onclick="robotTracePath.reset()" value="Clear Path">
-	<input id="resetAuto" class="reset" type="button" onclick="robotTraceAuto.reset()" value="Clear Auto">
-	<input id="resetTele" class="reset" type="button" onclick="robotTraceTele.reset()" value="Clear Tele">
-	<input id="resetTele" class="reset" type="button" onclick="mod3Trace.reset()" value="Clear Mod3">
+	<input id="resetAll" class="reset" type="button" onclick="traceables.reset()" value="Clear All">
+	<input id="resetPath" class="reset" type="button" onclick="pathTracer.reset()" value="Clear Path">
+	<input id="resetAuto" class="reset" type="button" onclick="robotAutoTracer.reset()" value="Clear Auto">
+	<input id="resetTele" class="reset" type="button" onclick="robotTeleTracer.reset()" value="Clear Tele">
+	<input id="resetMod3" class="reset" type="button" onclick="mod3Tracer.reset()" value="Clear Mod3">
 </body>
 </html>

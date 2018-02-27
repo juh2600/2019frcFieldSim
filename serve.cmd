@@ -1,1 +1,1 @@
-python -m pynetworktables2js %*
+python -m pynetworktables2js --robot 10.93.23.2 %*
