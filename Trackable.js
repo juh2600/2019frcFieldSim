@@ -3,38 +3,41 @@ var trackables = {}; // for functions that act on tracks
 
 function Trackable(
 	id,
-	width,
-	height,
 	posXkey,
 	posYkey,
 	posTkey=null,
-	color='rgb(0,0,255)',
-	smoothing=false,
-	scalar=1,
-	convertUnitsToField=function(x){return 12.0*scalar*x;}
+	options={}
 ) {
+	var defaults = {
+		width: 0,
+		height: 0,
+		smoothing: true,
+		scalar: 1,
+		convertUnitsToField: function(x){return 12.0*t.scalar*x;},
+		isFromSD: true
+	};
+	var o = $.extend({}, defaults, options || {});
+
 	var t = {};
 	t.id = id;
-	t.scalar = scalar;
-	t.width = width*scalar;
-	t.height = height*scalar;
-	t.color = color;
-	$('#trackables').append('<div id="'+id+'" class="trackable"></div>');
-	t.elem = $('#'+id)[0];
+	t.scalar = o.scalar;
+	t.width = o.width*t.scalar;
+	t.height = o.height*t.scalar;
+	$('#trackables').append('<div id="'+t.id+'" class="trackable"></div>');
+	t.elem = $('#'+t.id)[0];
 	$(t.elem).css({
 		"width":t.width,
 		"height":t.height,
 		"top":(-t.height)/2,
-		"left":(-t.width)/2,
-		"border-color":t.color
+		"left":(-t.width)/2
 		});
 	
-	t.eventUpdate = new Event(id);
+	t.eventUpdate = new Event(t.id);
 	
 	
-	t.keyX = toFunction(posXkey);
-	t.keyY = toFunction(posYkey);
-	t.keyT = toFunction(posTkey);
+	t.keyX = toFunction((o.isFromSD)?sd(posXkey):posXkey);
+	t.keyY = toFunction((o.isFromSD)?sd(posYkey):posYkey);
+	t.keyT = toFunction((o.isFromSD)?sd(posTkey):posTkey);
 
 	t.X = function(){return NetworkTables.getValue(t.keyX());};
 	t.Y = function(){return NetworkTables.getValue(t.keyY());};
@@ -43,27 +46,25 @@ function Trackable(
 	t.translateY = function() {return ' translateY('+t.getFieldY()+'px)';};
 	t.rotateT = function() {return ' rotate('+t.getFieldT()+'deg)';};
 	
-	t.getFieldX = function() {return convertUnitsToField(t.X());};
-	t.getFieldY = function() {return convertUnitsToField(t.Y());};
+	t.getFieldX = function() {return o.convertUnitsToField(t.X());};
+	t.getFieldY = function() {return o.convertUnitsToField(t.Y());};
 	t.getFieldT = function() {return t.T()+90;};
 	
 	if(posTkey === null) {t.T = function(){return null;}; t.rotateT = function(){return '';};}
 
 	t.update = function() {
-		console.log(t.X(),t.Y(),t.T());
+//		console.log(t.X(),t.Y(),t.T());
 		$(t.elem).css('transform',t.translateX()+t.translateY()+t.rotateT());
 		t.elem.dispatchEvent(t.eventUpdate);
 	}
-	if(smoothing) {
-		NetworkTables.addKeyListener(t.keyY(),t.update,true);
+	if(o.smoothing) {
+		NetworkTables.addKeyListener(t.keyX(),t.update,true);
 	} else {
 		NetworkTables.addKeyListener(t.keyX(),t.update,true);
 		NetworkTables.addKeyListener(t.keyY(),t.update,true);
 		if(posTkey !== null) NetworkTables.addKeyListener(t.keyT(),t.update,true);
 	}
-	// not sure about this stuff
-//	this.state = null; // set to "auto" or "tele" for tracing?
-	// actually this isn't where we should check this
+	
 	console.log(t);
 	tracks.push(t);
 	return t;

@@ -16,17 +16,17 @@ $(function(){
 	$('.wall').each(function(e){$(this).css('top',parseFloat($(this).css('top'))*scalingFactor+"px");});
 	$('#fieldImg').css('background-size',parseInt($('#fieldImg').css('background-size'))*scalingFactor+"px");
 	$('body').css('margin-top',parseInt($('body').css('margin-top'))*scalingFactor+"px");
-	
+	/*/
 	mod0 = new Trackable(
 		'mod0',
-		1.5,
-		4,
-		sd('Module 0 X'),
-		sd('Module 0 Y'),
-		sd('Module 0 Angle'),
-		'grey',
-		true,
-		scalingFactor
+		'Module 0 X',
+		'Module 0 Y',
+		'Module 0 Angle',
+		{
+			width: 1.5,
+			height: 4,
+			scalar: scalingFactor
+		}
 		);
 	mod0Tracer = new Traceable(
 		mod0,
@@ -37,14 +37,14 @@ $(function(){
 		);
 	mod1 = new Trackable(
 		'mod1',
-		1.5,
-		4,
-		sd('Module 1 X'),
-		sd('Module 1 Y'),
-		sd('Module 1 Angle'),
-		'grey',
-		true,
-		scalingFactor
+		'Module 1 X',
+		'Module 1 Y',
+		'Module 1 Angle',
+		{
+			width: 1.5,
+			height: 4,
+			scalar: scalingFactor
+		}
 		);
 	mod1Tracer = new Traceable(
 		mod1,
@@ -55,14 +55,14 @@ $(function(){
 		);
 	mod2 = new Trackable(
 		'mod2',
-		1.5,
-		4,
-		sd('Module 2 X'),
-		sd('Module 2 Y'),
-		sd('Module 2 Angle'),
-		'grey',
-		true,
-		scalingFactor
+		'Module 2 X',
+		'Module 2 Y',
+		'Module 2 Angle',
+		{
+			width: 1.5,
+			height: 4,
+			scalar: scalingFactor
+		}
 		);
 	mod2Tracer = new Traceable(
 		mod2,
@@ -73,14 +73,14 @@ $(function(){
 		);
 	mod3 = new Trackable(
 		'mod3',
-		1.5,
-		4,
-		sd('Module 3 X'),
-		sd('Module 3 Y'),
-		sd('Module 3 Angle'),
-		'grey',
-		true,
-		scalingFactor
+		'Module 3 X',
+		'Module 3 Y',
+		'Module 3 Angle',
+		{
+			width: 1.5,
+			height: 4,
+			scalar: scalingFactor
+		}
 		);
 	mod3Tracer = new Traceable(
 		mod3,
@@ -89,56 +89,63 @@ $(function(){
 		'grey',
 		1
 		);
-	
+	/**/
 	pathHead = new Trackable(
 		'pathHead',
-		0,
-		0,
-		sd('Path X'),
-		sd('Path Y'),
+		'Path X',
+		'Path Y',
 		null,
-		'transparent',
-		true,
-		scalingFactor
+		{
+			scalar: scalingFactor
+		}
 		);
 
 	pathTracer = new Traceable(
 		pathHead,
 		'pathTracer',
-		function(){return true;},
-		function(){return rainbow(colors,colorIndex++);},
-		1
+		{
+			condition: function(){return true;},
+			color: function(){return rainbow(colors,colorIndex++);},
+			thiccness: 1
+		}
 		);
 	
 	robot = new Trackable(
 		'robot',
-		39,
-		34,
-		sd('Robot X'),
-		sd('Robot Y'),
-		sd('Robot Heading'),
-		'#2222FF',
-		true,
-		scalingFactor
+		'Robot X',
+		'Robot Y',
+		'Robot Heading',
+		{
+			width: 39,
+			height: 34,
+			scalar: scalingFactor
+		}
 		);
 	robotAutoTracer = new Traceable(
 		robot,
 		'robotAutoTracer',
-		function(){return NetworkTables.getValue(sd('Auto'));},
-		function(){return rainbow(colors,colorIndex++);},
-		1
+		{
+			condition: function(){return NetworkTables.getValue(sd('Auto'));},
+			color: function(){return rainbow(colors,colorIndex++);},
+			thiccness: 1
+		}
 		);
 	robotTeleTracer = new Traceable(
 		robot,
 		'robotTeleTracer',
-		function(){return !NetworkTables.getValue(sd('Auto'));},
-		function(){return rainbow(colors,colorIndex++);},
-		1
+		{
+			condition: function(){return !NetworkTables.getValue(sd('Auto'));},
+			color: function(){return rainbow(colors,colorIndex++);},
+			thiccness: 1
+		}
 		);
 		
 	$(robot.elem).append('<div class="frant">frant</div>');
-	scale('#robot > .frant',['height','top']);
+	scale('#robot > .frant',['height','top','font-size']);
 	scale('#robot',['border-width','border-radius']);
 	scale('.field.overlay',['width','height']);
+	NetworkTables.addRobotConnectionListener(function(state){$('#robot').css({"border-color":((state)?'#2222FF':'#FF2222')});})
+	onoffline = function(){$('#robot').css({"border-color":"#FF2222"});};
+	NetworkTables.addKeyListener(sd('Auto'),function(key,state){if(state){traceables.reset()};});
 });
 

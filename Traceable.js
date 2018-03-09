@@ -9,11 +9,16 @@ traceables.reset = function(){
 function Traceable(
 	trackable,
 	canvas,
-	condition=function(){return true;}, // gonna use an event instead // maybe
-	color=function(){return 'red';},
-	thiccness=function(){return 3;},
-	newPathTrigger=function(){return false;} // how to tie this in with a listener?
+	options={}
 ) {
+	var defaults = {
+		condition: function(){return true;}, // gonna use an event instead // maybe
+		color: function(){return 'red';},
+		thiccness: function(){return 3;},
+		newPathTrigger: function(){return false;} // how to tie this in with a listener?
+	};
+	var o = $.extend({}, defaults, options || {});
+	
 	var t = {};
 	t.id = canvas;
 	t.trackable = trackable;
@@ -27,12 +32,12 @@ function Traceable(
 //	t.getX = t.trackable.getX;
 //	t.getY = t.trackable.getY;
 	
-	t.condition = condition;
+	t.condition = o.condition;
 	
 //	t.color = toFunction(color);
 //	t.thiccness = toFunction(thiccness);
-	t.color = color;
-	t.thiccness = thiccness;
+	t.color = o.color;
+	t.thiccness = o.thiccness;
 	
 	t.penState = "up";
 	
