@@ -55,6 +55,11 @@ body {
 	font-size: 60%;
 }
 
+#vector {
+	border-width: 1px;
+	border-color: red;
+}
+
 #pathHead {
 	display: none;
 }

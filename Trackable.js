@@ -9,8 +9,8 @@ function Trackable(
 	options={}
 ) {
 	var defaults = {
-		width: 0,
-		height: 0,
+		width: toFunction(0),
+		height: toFunction(0),
 		smoothing: true,
 		scalar: 1,
 		convertUnitsToField: function(x){return 12.0*t.scalar*x;},
@@ -21,15 +21,15 @@ function Trackable(
 	var t = {};
 	t.id = id;
 	t.scalar = o.scalar;
-	t.width = o.width*t.scalar;
-	t.height = o.height*t.scalar;
+	t.width = toScaledFunction(o.width,t.scalar);
+	t.height = toScaledFunction(o.height,t.scalar);
 	$('#trackables').append('<div id="'+t.id+'" class="trackable"></div>');
 	t.elem = $('#'+t.id)[0];
 	$(t.elem).css({
-		"width":t.width,
-		"height":t.height,
-		"top":(-t.height)/2,
-		"left":(-t.width)/2
+		"width":t.width(),
+		"height":t.height(),
+		"top":(-t.height())/2,
+		"left":(-t.width())/2
 		});
 	
 	t.eventUpdate = new Event(t.id);
@@ -54,6 +54,12 @@ function Trackable(
 
 	t.update = function() {
 //		console.log(t.X(),t.Y(),t.T());
+		$(t.elem).css({
+			"width":t.width(),
+			"height":t.height(),
+			"top":(-t.height())/2,
+			"left":(-t.width())/2
+		});
 		$(t.elem).css('transform',t.translateX()+t.translateY()+t.rotateT());
 		t.elem.dispatchEvent(t.eventUpdate);
 	}

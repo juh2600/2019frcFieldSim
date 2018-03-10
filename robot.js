@@ -140,6 +140,19 @@ $(function(){
 		}
 		);
 		
+	vector = new Trackable(
+		'vector',
+		'Robot X',
+		'Robot Y',
+		'Vector Heading',
+		{
+			width: 0,
+			height: function(){return NetworkTables.getValue(sd('Vector Magnitude'));},
+			scalar: scalingFactor
+		}
+		);
+
+		
 	$(robot.elem).append('<div class="frant">frant</div>');
 	scale('#robot > .frant',['height','top','font-size']);
 	scale('#robot',['border-width','border-radius']);
