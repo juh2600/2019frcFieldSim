@@ -23,8 +23,8 @@ body {
 	width: 648px;
 	height: 324px;
 }
-#robot {
-	border-color: #2222FF;
+#robot, #pathHead {
+	border-color: #2222FF77;
 	border-width: 3.25px;
 	border-radius: 1.5px;
 }
@@ -56,13 +56,14 @@ body {
 }
 
 #vector {
-	border-width: 1px;
-	border-color: red;
+	border-width: 1.5px;
+	border-color: magenta;
+	transform-origin: inherit;
 }
 
-#pathHead {
+/*#pathHead {
 	display: none;
-}
+}*/
 
 .shadowbot {
     box-sizing: border-box;
@@ -132,4 +133,12 @@ img.field {
     background-repeat: repeat;
     background-size: 24px; /* 2ft */
 	background-position: center;
+}
+
+#video {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 640px;
+    height: 480px;
 }

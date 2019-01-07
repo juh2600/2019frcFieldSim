@@ -25,7 +25,7 @@ function rollingArray(key,options={}) {
 //array.length = 10;
 //array.puush = function(x) {this.shift(); this.push(x); return this;};
 var indices = new rollingArray(sd('Robot X'),
-	{values: [-9,-8,-7,-6,-5,-4,-3,-2,-1,0]}
+	{values: [0,0,0,0,0,0,0,0,0,0]}
 );
 indices.puush = function(){
 	var i = this.length + this.shift();

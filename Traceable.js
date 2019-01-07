@@ -12,7 +12,8 @@ function Traceable(
 	options={}
 ) {
 	var defaults = {
-		condition: function(){return true;}, // gonna use an event instead // maybe
+//		condition: function(){return true;}, // gonna use an event instead // maybe // nah
+		condition: distLessThan(64),
 		color: function(){return 'red';},
 		thiccness: function(){return 3;},
 		newPathTrigger: function(){return false;} // how to tie this in with a listener?
@@ -32,21 +33,29 @@ function Traceable(
 //	t.getX = t.trackable.getX;
 //	t.getY = t.trackable.getY;
 	
-	t.condition = o.condition;
+	t.condition = toFunction(o.condition);
 	
-//	t.color = toFunction(color);
-//	t.thiccness = toFunction(thiccness);
-	t.color = o.color;
-	t.thiccness = o.thiccness;
+	t.color = toFunction(o.color);
+	t.thiccness = toFunction(o.thiccness);
+	
+	t.x = 0;
+	t.y = 0;
 	
 	t.penState = "up";
+	
+	t.updateInternalPosition = function() {
+		t.x = t.trackable.getFieldX();
+		t.y = t.trackable.getFieldY();
+	}
+	
+	t.jump = function() {
+		t.canvas.moveTo(t.x,t.y);
+	}
 	
 	t.penDown = function(){
 		t.penState = "down";
 		t.canvas.beginPath();
-		t.canvas.moveTo(t.trackable.getFieldX(),t.trackable.getFieldY());
-		t.canvas.strokeStyle = toFunction(t.color)();
-		t.canvas.lineWidth = toFunction(t.thiccness)();
+		t.jump();
 	};
 	t.penUp = function(){
 		t.penState = "up";
@@ -54,10 +63,16 @@ function Traceable(
 	};
 	t.update = function(e){
 		if(t.condition()){
-			if(t.penState=="up") {t.penDown();}
-			t.canvas.lineTo(t.trackable.getFieldX(),t.trackable.getFieldY());
+			t.penDown();
+			t.updateInternalPosition();
+			t.canvas.lineTo(t.x,t.y);
+			t.canvas.strokeStyle = t.color();
+			t.canvas.lineWidth = t.thiccness();
 			t.canvas.stroke();
-		} else if(t.penState=="down") {t.penUp();}
+		} else {
+			if(t.penState=="down") {t.penUp();}
+			t.updateInternalPosition();
+		}
 	};
 	
 	t.reset = function(){
@@ -65,7 +80,8 @@ function Traceable(
 		t.penUp();
 		t.canvas.clearRect(0,0,t.width,t.height);
 	};
-	
+	t.updateInternalPosition();
+	t.jump();
 	t.trackable.elem.addEventListener(t.trackable.id, t.update);
 	console.log(t);
 	traces.push(t);
