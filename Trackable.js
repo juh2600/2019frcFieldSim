@@ -14,9 +14,11 @@ function Trackable(
 		height: toFunction(0),
 		smoothing: true,
 		scalar: 1,
-		convertUnitsToField: function(x){return /*12.0**/t.scalar*x;},
-		convertAngleToField: function(x){return x+90.0;},
-		convertPositionToField: function(x,y){return [x,y];}, // FIXME: Implement mirror coordinate system by default
+		transformPose: function(Pose) {return Pose;}, // Takes a Pose {X,Y,T} and returns a Pose {X',Y',T'}
+// Deprecated, use transformPose
+//		convertUnitsToField: function(x){return /*12.0**/t.scalar*x;},
+//		convertAngleToField: function(x){return x+90.0;},
+//		convertPositionToField: function(x,y){return [x,y];}, // FIXME: Implement mirror coordinate system by default
 		isFromSD: true,
 		log: function(){}
 	};
@@ -27,6 +29,7 @@ function Trackable(
 	t.scalar = o.scalar;
 	t.width = toScaledFunction(o.width,t.scalar);
 	t.height = toScaledFunction(o.height,t.scalar);
+	t.transformPose = o.transformPose;
 	$('#trackables').append('<div id="'+t.id+'" class="trackable"></div>');
 	t.elem = $('#'+t.id)[0];
 	$(t.elem).css({
@@ -38,30 +41,45 @@ function Trackable(
 	
 	t.eventUpdate = new Event(t.id);
 	t.pose = (o.isFromSD)?sd(o.pose):o.pose;
-	
+
 	// a function returning...? the key for each value, I think, as a string?
 	t.keyX = toFunction((o.isFromSD)?sd(posXkey):posXkey);
 	t.keyY = toFunction((o.isFromSD)?sd(posYkey):posYkey);
 	t.keyT = toFunction((o.isFromSD)?sd(posTkey):posTkey);
-	// a function probably returning the value of each element of the pose
+	
+	// functions returning the given pose and its components
 	if(t.pose === null) {
 		t.X = function(){return NetworkTables.getValue(t.keyX());};
 		t.Y = function(){return NetworkTables.getValue(t.keyY());};
 		t.T = function(){return NetworkTables.getValue(t.keyT());};
+		t.Pose = function(){return {X: t.X(), Y: t.Y(), T: t.T()};};
 	} else {
-		t.Pose = function(){return NetworkTables.getValue(t.pose);};
-		t.X = function(){return t.Pose()[0];};
-		t.Y = function(){return t.Pose()[1];};
-		t.T = function(){return t.Pose()[2];};
+		t.Pose = function(){
+			var _pose = NetworkTables.getValue(t.pose);
+			return {X: _pose[0], Y: _pose[1], T: _pose[2]};
+		};
+		t.X = function(){return t.Pose().X;};
+		t.Y = function(){return t.Pose().Y;};
+		t.T = function(){return t.Pose().T;};
 	}
+
+	t.updatePose = function(){
+		t.CurrentPose = t.Pose();
+		t.CurrentFieldPose = t.transformPose(t.CurrentPose);
+	};
+	t.CurrentPose = {X: 0, Y: 0, T: 0};
+	t.CurrentFieldPose = t.transformPose(t.CurrentPose);
+	
+	// functions returning the transformed pose and its components
+	t.getFieldPose = function() {return t.CurrentFieldPose;};
+	t.getFieldX = function() {return t.CurrentFieldPose.X;};
+	t.getFieldY = function() {return t.CurrentFieldPose.Y;};
+	t.getFieldT = function() {return t.CurrentFieldPose.T;};
+
 	// a function returning CSS transforms as strings
 	t.translateX = function() {return 'translateX('+t.getFieldX()+'px)';};
 	t.translateY = function() {return ' translateY('+t.getFieldY()+'px)';};
 	t.rotateT = function() {return ' rotate('+t.getFieldT()+'deg)';};
-	
-	t.getFieldX = function() {return o.convertUnitsToField(t.X());};
-	t.getFieldY = function() {return o.convertUnitsToField(t.Y());};
-	t.getFieldT = function() {return o.convertAngleToField(t.T());};
 	
 	if(posXkey === null && t.pose === null) {t.X = function(){return null;}; t.translateX = function(){return '';};}
 	if(posYkey === null && t.pose === null) {t.Y = function(){return null;}; t.translateY = function(){return '';};}
@@ -70,6 +88,7 @@ function Trackable(
 	t.log = o.log;
 	
 	t.update = function() {
+		t.updatePose();
 //		console.log(t.X(),t.Y(),t.T());
 		$(t.elem).css({
 			"width":t.width(),

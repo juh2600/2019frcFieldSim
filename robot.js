@@ -18,117 +18,47 @@ function distLessThan(x, log = false) {
 	}
 }
 
+var wheelOpts = {
+			width: 1.5,
+			height: 4,
+			scalar: scalingFactor*8,
+			convertAngleToField: function(x){return x;}
+};
+
+function transformPose(Pose) {
+	return {
+		X: Pose.X * scalingFactor,
+		Y: (Pose.Y+162.0) * scalingFactor,
+		T: Pose.T + 90.0
+	};
+};
+
 $(function(){
 	$('.field').width($('.field').width()*scalingFactor);
 	$('.field').height($('.field').height()*scalingFactor);
 	$('.wall').each(function(e){$(this).css('top',parseFloat($(this).css('top'))*scalingFactor+"px");});
 	$('#fieldImg').css('background-size',parseInt($('#fieldImg').css('background-size'))*scalingFactor+"px");
 	$('body').css('margin-top',parseInt($('body').css('margin-top'))*scalingFactor+"px");
-	/**/
-	mod0 = new Trackable(
-		'mod0',
-		/*/'Module 0 X',
-		'Module 0 Y',/*/
-		null,null,
-		'Module 0 Angle',
-		{
-			width: 1.5,
-			height: 4,
-			scalar: scalingFactor*8,
-			convertAngleToField: function(x){return x;}
-		}
-		);/*/
-	mod0Tracer = new Traceable(
-		mod0,
-		'mod0Tracer',
-		function(){return true;},
-		'grey',
-		1
-		);/*/
-	mod1 = new Trackable(
-		'mod1',
-		/*/'Module 1 X',
-		'Module 1 Y',/*/
-		null,null,
-		'Module 1 Angle',
-		{
-			width: 1.5,
-			height: 4,
-			scalar: scalingFactor*8,
-			convertAngleToField: function(x){return x;}
-		}
-		);/*/
-	mod1Tracer = new Traceable(
-		mod1,
-		'mod1Tracer',
-		function(){return true;},
-		'grey',
-		1
-		);/*/
-	mod2 = new Trackable(
-		'mod2',
-		/*/'Module 2 X',
-		'Module 2 Y',/*/
-		null,null,
-		'Module 2 Angle',
-		{
-			width: 1.5,
-			height: 4,
-			scalar: scalingFactor*8,
-			convertAngleToField: function(x){return x;}
-		}
-		);/*/
-	mod2Tracer = new Traceable(
-		mod2,
-		'mod2Tracer',
-		function(){return true;},
-		'grey',
-		1
-		);/*/
-	mod3 = new Trackable(
-		'mod3',
-		/*/'Module 3 X',
-		'Module 3 Y',/*/
-		null,null,
-		'Module 3 Angle',
-		{
-			width: 1.5,
-			height: 4,
-			scalar: scalingFactor*8,
-			convertAngleToField: function(x){return x;}
-		}
-		);/*/
-	mod3Tracer = new Traceable(
-		mod3,
-		'mod3Tracer',
-		function(){return true;},
-		'grey',
-		1
-		);
-	/**/
+	mod0 = new Trackable('mod0',null,null,'Module 0 Angle',wheelOpts);
+	mod1 = new Trackable('mod1',null,null,'Module 1 Angle',wheelOpts);
+	mod2 = new Trackable('mod2',null,null,'Module 2 Angle',wheelOpts);
+	mod3 = new Trackable('mod3',null,null,'Module 3 Angle',wheelOpts);
 	pathHead = new Trackable(
-		'pathHead',
-//		'Path X',
-//		'Path Y',
-//		'Robot Heading',
-		null,
-		null,
-		null,
+		'pathHead',null,null,null,
 		{
 			width: 39,
 			height: 34,
 			scalar: scalingFactor,
+			transformPose: transformPose,
 			log: function(){
 				console.log(NetworkTables.getValue(sd('Path Pose')));
 				},
 			smoothing: true,
 			pose: 'Path Pose'
-		}
-		);
+		});
 
 	pathTracer = new Traceable(
-		pathHead,
-		'pathTracer',
+		pathHead,'pathTracer',
 		{
 //			condition: function(){return true;},
 			condition: distLessThan(64),
@@ -136,58 +66,44 @@ $(function(){
 //			color: function(){return rainbow(1.0,(2/3)*(1.0-NetworkTables.getValue(sd('Path Velocity'))));},
 			color: function(){return rainbow(1.0,(2/3)*(1.0-NetworkTables.getValue(sd('Path Pose'))[3]));},
 			thiccness: 1
-		}
-		);
+		});
 	
 	robot = new Trackable(
-		'robot',
-		//'Robot X',
-		//'Robot Y',
-		//'Robot Heading',
-		null,
-		null,
-		null,
+		'robot',null,null,null,
 		{
 			pose: 'Robot Pose',
 			width: 39,
 			height: 34,
-			scalar: scalingFactor
-		}
-		);
+			scalar: scalingFactor,
+			transformPose: transformPose
+		});
 	robotAutoTracer = new Traceable(
-		robot,
-		'robotAutoTracer',
+		robot,'robotAutoTracer',
 		{
 //			condition: function(){return NetworkTables.getValue(sd('Auto')) && distLessThan(64);},
 //			color: function(){return rainbow(colors,1);},
 			color: function(){return rainbow(1.0,(2/3)*(1.0-NetworkTables.getValue(sd('Robot Velocity'))));},
 			thiccness: 1,
 			smoothing: false
-		}
-		);
+		});
 	robotTeleTracer = new Traceable(
-		robot,
-		'robotTeleTracer',
+		robot,'robotTeleTracer',
 		{
 //			condition: function(){return !NetworkTables.getValue(sd('Auto')) && distLessThan(64);},
 //			color: function(){return rainbow(colors,colorIndex++);},
 			color: function(){return rainbow(1.0,(2/3)*(1.0-NetworkTables.getValue(sd('Robot Velocity'))));},
 			thiccness: 1,
 			smoothing: false
-		}
-		);
+		});
 		
 	vector = new Trackable(
-		'vector',
-		'Robot X',
-		'Robot Y',
-		'Vector Direction',
+		'vector','Robot X','Robot Y','Vector Direction',
 		{
 			width: 0,
 			height: function(){return 24*NetworkTables.getValue(sd('Vector Magnitude'));},
-			scalar: scalingFactor
-		}
-		);
+			scalar: scalingFactor,
+			transformPose: transformPose
+		});
 
 		
 	$(robot.elem).append('<div class="frant">frant</div>');
