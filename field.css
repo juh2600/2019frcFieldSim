@@ -123,10 +123,11 @@ span.point-data {
 	border: 0.5px dashed black;
 }
 #negYWall {
-	top: 16.25px;
+/*	top: 16.25px; */
+	top: 0px;
 }
 #posYWall {
-	top: 303.13px;
+	top: calc(303.13px - 16.25px);
 }
 img.field {
     background: url(grid.png);
