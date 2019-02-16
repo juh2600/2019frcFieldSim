@@ -48,7 +48,7 @@ function Trackable(
 	t.keyT = toFunction((o.isFromSD)?sd(posTkey):posTkey);
 	
 	// functions returning the given pose and its components
-	if(t.pose === null) {
+	if(t.pose === null || t.pose == sd('null')) {
 		t.X = function(){return NetworkTables.getValue(t.keyX());};
 		t.Y = function(){return NetworkTables.getValue(t.keyY());};
 		t.T = function(){return NetworkTables.getValue(t.keyT());};
@@ -65,6 +65,8 @@ function Trackable(
 
 	t.updatePose = function(){
 		t.CurrentPose = t.Pose();
+		//console.log(t.CurrentPose);
+		t.CurrentPose = $.extend({}, {X:0,Y:0,T:0}, t.CurrentPose || {});
 		t.CurrentFieldPose = t.transformPose(t.CurrentPose);
 	};
 	t.CurrentPose = {X: 0, Y: 0, T: 0};
@@ -72,14 +74,14 @@ function Trackable(
 	
 	// functions returning the transformed pose and its components
 	t.getFieldPose = function() {return t.CurrentFieldPose;};
-	t.getFieldX = function() {return t.CurrentFieldPose.X;};
-	t.getFieldY = function() {return t.CurrentFieldPose.Y;};
-	t.getFieldT = function() {return t.CurrentFieldPose.T;};
+	t.getFieldX    = function() {return t.CurrentFieldPose.X;};
+	t.getFieldY    = function() {return t.CurrentFieldPose.Y;};
+	t.getFieldT    = function() {return t.CurrentFieldPose.T;};
 
 	// a function returning CSS transforms as strings
-	t.translateX = function() {return 'translateX('+t.getFieldX()+'px)';};
+	t.translateX = function() {return  'translateX('+t.getFieldX()+'px)';};
 	t.translateY = function() {return ' translateY('+t.getFieldY()+'px)';};
-	t.rotateT = function() {return ' rotate('+t.getFieldT()+'deg)';};
+	t.rotateT =    function() {return     ' rotate('+t.getFieldT()+'deg)';};
 	
 	if(posXkey === null && t.pose === null) {t.X = function(){return null;}; t.translateX = function(){return '';};}
 	if(posYkey === null && t.pose === null) {t.Y = function(){return null;}; t.translateY = function(){return '';};}
@@ -89,7 +91,7 @@ function Trackable(
 	
 	t.update = function() {
 		t.updatePose();
-//		console.log(t.X(),t.Y(),t.T());
+		//console.log(t.X(),t.Y(),t.T());
 		$(t.elem).css({
 			"width":t.width(),
 			"height":t.height(),
@@ -101,7 +103,7 @@ function Trackable(
 		t.log();
 		t.elem.dispatchEvent(t.eventUpdate);
 	}
-	if(t.pose !== null) {
+	if(t.pose !== null && t.pose != sd('null')) {
 		NetworkTables.addKeyListener(t.pose,t.update,true);
 	}
 	else if(posXkey === null && posYkey === null && !(posTkey === null)) {

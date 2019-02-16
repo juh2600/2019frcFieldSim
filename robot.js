@@ -18,11 +18,18 @@ function distLessThan(x, log = false) {
 	}
 }
 
+var robotOpts = {
+	width: 29.5,
+	height: 29.5 + 2.625,
+};
+
 var wheelOpts = {
 			width: 1.5,
 			height: 4,
 			scalar: scalingFactor*8,
-			convertAngleToField: function(x){return x;}
+			convertAngleToField: function(x){return x;},
+			pose: null,
+			smoothing: false
 };
 
 function transformPose(Pose) {
@@ -46,8 +53,8 @@ $(function(){
 	pathHead = new Trackable(
 		'pathHead',null,null,null,
 		{
-			width: 39,
-			height: 34,
+			width: robotOpts.width,
+			height: robotOpts.height,
 			scalar: scalingFactor,
 			transformPose: transformPose,
 			log: function(){
@@ -72,8 +79,8 @@ $(function(){
 		'robot',null,null,null,
 		{
 			pose: 'Robot Pose',
-			width: 39,
-			height: 34,
+			width: robotOpts.width,
+			height: robotOpts.height,
 			scalar: scalingFactor,
 			transformPose: transformPose
 		});
